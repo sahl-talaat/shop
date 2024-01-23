@@ -1,36 +1,28 @@
 #include<iostream>
-#include"pizza.h"
-#include"fish.h"
+#include"shop.h"
 using namespace std;
 
 namespace customer
 {
-    class Customer : public pizza::Pizza, public fish::Fish
+    class Customer
     {
     private:
-        std::string cust_name;
-        double discound;
+        abs_shop::Shop* chosen_shop;
         
     public:
-        Customer(/* args */){
+        Customer(abs_shop::Shop* shop):chosen_shop(shop){
             
         }
         void display_menu(){
-            int chose{};
-            cout<<"take order\n";
-            cout<<"1. PIZAA\t2.FISH\n";
-            if (chose == 1)
-                Pizza::display_menu();
-            else if (chose == 2)
-                Fish::display_menu();
-            else
-                return;
+            chosen_shop->display_menu();
         }
 
         void take_order(){
             display_menu();
         }
-        bool order_done(){} 
+        bool order_done(){
+            return 1;
+        } 
         void order_price(){}
         ~Customer(){}
     };

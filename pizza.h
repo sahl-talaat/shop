@@ -9,23 +9,25 @@ namespace pizza
     protected:
         /* data */
     public:
-        Pizza(/* args */){
+        Pizza(){
             this->shop_name = variable::pizza_shop;
-            for(int i = 0 ; i < variable::pizza_menu->length()-1 ; i++){
-                this->menu[i] = variable::pizza_menu[i];
+            for (int i = 0 ; i < variable::pizza_menu->size()-1 ; i++){
+                Shop::add_to_menu(variable::pizza_menu[i],variable::pizza_price[i]);
             }
         }
         void display_menu(){
-            for(int i = 0 ; i < menu->length() ; i++){
-                cout<<"["<<menu[i]<<"\t";
+            std::cout << "Menu for " << shop_name << ":" << std::endl;
+            for (const auto& item : shop_menu) {
+                std::cout << item.first << " - $" << item.second << std::endl;
             }
-            cout<<"]\n";
         }
 
         void take_order(){
             display_menu();
         }
-        bool order_done(){} 
+        bool order_done(){
+            return 1;
+        } 
         void order_price(){}
         ~Pizza(){}
     };
