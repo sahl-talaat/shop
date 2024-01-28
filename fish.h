@@ -1,9 +1,8 @@
 #include<iostream>
 #include"shop.h"
-#include"const_variable.h"
 using namespace std;
 
-namespace fish
+namespace shop
 {
 
     class Fish : abs_shop::Shop
@@ -11,25 +10,31 @@ namespace fish
     protected:
         /* data */
     public:
-        Fish(){
-            this->shop_name = variable::fish_shop;
-            for (int i = 0 ; i < variable::fish_menu->size()-1 ; i++){
-                Shop::add_to_menu(variable::fish_menu[i],variable::fish_price[i]);
+        
+        Fish(std::string &_name,  const std::string &menu_file)
+        :abs_shop::Shop(_name,menu_file){
+
+        }
+
+        void display_menu() override {
+            for (int i = 0 ; i < menu.size() ; i++){
+                std::cout<< "<< "<<i+1<<" >> dish : "<<menu[i].product<<"  >> cost : "<<menu[i].price<<" per unit\n";
             }
         }
-        void display_menu(){
-            std::cout << "Menu for " << shop_name << ":" << std::endl;
-            for (const auto& item : shop_menu) {
-                std::cout << item.first << " - $" << item.second << std::endl;
+
+        void take_order(model::Menu menu, int count) override {
+            order.emplace_back(menu , count);
+        }
+
+        void set_order_cost() override {
+            for(auto item : order){
+                order_cost += item.total_price;
             }
         }
-        void take_order(){
-            display_menu();
+
+        double get_total_cost()  override {
+            return order_cost;
         }
-        bool order_done(){
-            return 1;
-        } 
-        void order_price(){}
         ~Fish(){}
     };
     

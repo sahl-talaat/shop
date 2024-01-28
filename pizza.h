@@ -1,34 +1,42 @@
 #include<iostream>
 #include"shop.h"
-#include"const_variable.h"
+#include"model.h"
 
-namespace pizza
+namespace shop
 {
+
+    
     class Pizza : public abs_shop::Shop
     {
-    protected:
-        /* data */
+    private :
+
     public:
-        Pizza(){
-            this->shop_name = variable::pizza_shop;
-            for (int i = 0 ; i < variable::pizza_menu->size()-1 ; i++){
-                Shop::add_to_menu(variable::pizza_menu[i],variable::pizza_price[i]);
-            }
+        Pizza(std::string &_name, const std::string &_menu_file)
+        :abs_shop::Shop(_name,_menu_file){
         }
-        void display_menu(){
-            std::cout << "Menu for " << shop_name << ":" << std::endl;
-            for (const auto& item : shop_menu) {
-                std::cout << item.first << " - $" << item.second << std::endl;
+        /*
+        
+        virtual bool order_done() = 0; 
+        */
+        void display_menu() override {
+            for (int i = 0 ; i < menu.size() ; i++){
+                std::cout<< "<< "<<i+1<<" >> dish : "<<menu[i].product<<"  >> cost : "<<menu[i].price<<" per unit\n";
             }
         }
 
-        void take_order(){
-            display_menu();
+        void take_order(model::Menu menu, int count) override {
+            order.emplace_back(menu , count);
         }
-        bool order_done(){
-            return 1;
-        } 
-        void order_price(){}
+
+        void set_order_cost() override {
+            for(auto item : order){
+                order_cost += item.total_price;
+            }
+        }
+
+        double get_total_cost()  override {
+            return order_cost;
+        }
         ~Pizza(){}
     };
     
