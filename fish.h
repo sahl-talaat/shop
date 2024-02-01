@@ -22,8 +22,8 @@ namespace shop
             }
         }
 
-        void take_order(model::Menu menu, int count) override {
-            order.emplace_back(menu , count);
+        void take_order(int product_num, int count) override {
+            order.emplace_back(menu[product_num-1] , count);
         }
 
         void set_order_cost() override {
