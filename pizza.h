@@ -1,32 +1,59 @@
 #include<iostream>
 #include"shop.h"
-#include"const_variable.h"
+#include"model.h"
+#include"reus_code.h"
 
-namespace pizza
+namespace shop
 {
+
+    
     class Pizza : public abs_shop::Shop
     {
-    protected:
-        /* data */
+    private :
+
     public:
-        Pizza(/* args */){
-            this->shop_name = variable::pizza_shop;
-            for(int i = 0 ; i < variable::pizza_menu->length()-1 ; i++){
-                this->menu[i] = variable::pizza_menu[i];
+        Pizza(std::string &_name, const std::string &_menu_file)
+        :abs_shop::Shop(_name){
+             try
+            {
+                menu = UI::loadMenuFromFile(_menu_file);
+                if (menu.empty()){
+                    menu.emplace_back("special_order",0.0);
+                    throw "load menu data faild";
+                }
             }
+            catch(char* msg)
+            {
+                std::cerr << msg << '\n';
+            }
+            
         }
-        void display_menu(){
-            for(int i = 0 ; i < menu->length() ; i++){
-                cout<<"["<<menu[i]<<"\t";
+        
+        void display_menu() override {
+            for (int i = 0 ; i < menu.size() ; i++){
+                std::cout<< "<< "<<i+1<<" >> dish : "<<menu[i].product<<"  >> cost : "<<menu[i].price<<" per unit\n";
             }
-            cout<<"]\n";
         }
 
-        void take_order(){
-            display_menu();
+        void display_order() override {
+            for (int i = 0 ; i < order.size() ; i++){
+                std::cout<< "<< "<<i+1<<" >> dish : "<<order[i].menu.product<<"  >> cost : "<<order[i].total_price<<" per "<<order[i].count<<std::endl;
+            }
         }
-        bool order_done(){} 
-        void order_price(){}
+
+        void take_order(int product_num, int count) override {
+            order.emplace_back(menu[product_num-1] , count);
+        }
+
+        void set_order_cost() override {
+            for(auto item : order){
+                order_cost += item.total_price;
+            }
+        }
+
+        double get_total_cost()  override {
+            return (order_cost + (order_cost * 0.14));
+        }
         ~Pizza(){}
     };
     

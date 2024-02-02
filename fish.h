@@ -1,9 +1,10 @@
 #include<iostream>
 #include"shop.h"
-#include"const_variable.h"
+#include"model.h"
+#include"reus_code.h"
 using namespace std;
 
-namespace fish
+namespace shop
 {
 
     class Fish : abs_shop::Shop
@@ -11,25 +12,49 @@ namespace fish
     protected:
         /* data */
     public:
-        Fish(/* args */):Shop(){
-            shop_name = variable::fish_shop;
-            for(int i = 0 ; i < variable::fish_menu->length()-1 ; i++){
-                this->menu[i] = variable::fish_menu[i];
-                this->menu_price[i] = variable::fish_price[i];
+        
+        Fish(std::string &_name,  const std::string &_menu_file)
+        :abs_shop::Shop(_name){
+             try
+            {
+                menu = UI::loadMenuFromFile(_menu_file);
+                if (menu.empty()){
+                    menu.emplace_back("special_order",0.0);
+                    throw "load menu data faild";
+                }
+            }
+            catch(char* msg)
+            {
+                std::cerr << msg << '\n';
+            }
+            
+        }
+
+        void display_menu() override {
+            for (int i = 0 ; i < menu.size() ; i++){
+                std::cout<< "<< "<<i+1<<" >> dish : "<<menu[i].product<<"  >> cost : "<<menu[i].price<<" per unit\n";
             }
         }
-        void display_menu(){
-            cout<<"[";
-            for(int i = 0 ; i < menu->length() ; i++){
-                cout<<i+1<<menu[i]<<" : "<<menu_price[i]<<"\t";
+
+        void display_order() override {
+            for (int i = 0 ; i < order.size() ; i++){
+                std::cout<< "<< "<<i+1<<" >> dish : "<<order[i].menu.product<<"  >> cost : "<<" per "<<order[i].count<<std::endl;
             }
-            cout<<"]\n";
         }
-        void take_order(){
-            display_menu();
+
+        void take_order(int product_num, int count) override {
+            order.emplace_back(menu[product_num-1] , count);
         }
-        bool order_done(){} 
-        void order_price(){}
+
+        void set_order_cost() override {
+            for(auto item : order){
+                order_cost += item.total_price;
+            }
+        }
+
+        double get_total_cost()  override {
+            return (order_cost + (order_cost * 0.14));
+        }
         ~Fish(){}
     };
     
