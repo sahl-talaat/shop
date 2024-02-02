@@ -1,6 +1,7 @@
 #include<iostream>
 #include<fstream>
 #include<vector>
+#include"shop.h"
 #include"model.h"
 
 
@@ -22,6 +23,20 @@ namespace UI
         file.close();
     }
     return menu;
+    }
+
+    void take_order(abs_shop::Shop *choosen){
+         while (1) {
+            int count; 
+            int product_num;
+            std::cout<< "product_num : ";
+            std::cin>>product_num;
+            if (product_num == 0)
+                break;
+            std::cout<< "count : ";
+            std::cin>>count;
+            choosen->take_order(product_num,count);
+        }
     }
 
 } // namespace code
