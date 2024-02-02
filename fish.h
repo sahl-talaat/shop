@@ -13,9 +13,10 @@ namespace shop
         /* data */
     public:
         
-        Fish(std::string &_name,  const std::string &_menu_file)
-        :abs_shop::Shop(_name){
-             try
+        Fish(std::string _name):abs_shop::Shop(_name){}
+
+        void set_menu(const std::string &_menu_file) override{
+            try
             {
                 menu = UI::loadMenuFromFile(_menu_file);
                 if (menu.empty()){
@@ -27,7 +28,6 @@ namespace shop
             {
                 std::cerr << msg << '\n';
             }
-            
         }
 
         void display_menu() override {
