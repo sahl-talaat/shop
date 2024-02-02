@@ -6,27 +6,16 @@
 
 int main(){
 
-    //abs_shop::Shop* shop_ptr = new shop::Pizza;
-    std::string pizza_name = "pizza", fish_name = "fish", fish_menu = "fish_menu.txt", pizza_menu = "pizza_menu.txt";
-    shop::Pizza  pizza(pizza_name, pizza_menu);
-    shop::Fish fish(pizza_name, pizza_menu);
+    shop::Pizza  pizza("pizza");
+    shop::Fish fish("fish");
+
+    pizza.set_menu("pizza_menu.txt");
+    fish.set_menu("fish_menu.txt");
+
     abs_shop::Shop *shop = &pizza;
-    cleint::Cleint cleint;
-    cleint.operation(shop);
+    cleint::Cleint cleint(shop);
+    cleint.operation();
+    std::cout<<"\ttotal cost for order = "<<shop->get_total_cost()<<" $\n";
 
 
-
-
-
-
-    /* 
-    shop::Pizza* pizza();
-    shop::Fish fish();
-    customer::Customer cust();
-    cust.display_menu(); */
-
-   // display_menue 
-   
-   // take_order
-   // operation 
 }

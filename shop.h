@@ -17,11 +17,11 @@ namespace abs_shop
         std::vector<model::Order> order;
         double order_cost;
     public:
-        Shop(std::string &_name)
+        Shop(std::string _name)
         :name(_name),order_cost(0){
            
         }
-        
+        virtual void set_menu(const std::string &_menu_file) = 0;
         virtual void display_menu() = 0;
         virtual void display_order() = 0;
         virtual void take_order(int product_num, int count) = 0;

@@ -25,7 +25,7 @@ namespace UI
     return menu;
     }
 
-    void take_order(abs_shop::Shop *choosen){
+    void take_order_viewed_for_user(abs_shop::Shop *choosen){
          while (1) {
             int count; 
             int product_num;
