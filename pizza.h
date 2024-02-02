@@ -1,6 +1,7 @@
 #include<iostream>
 #include"shop.h"
 #include"model.h"
+#include"reus_code.h"
 
 namespace shop
 {
@@ -12,15 +13,31 @@ namespace shop
 
     public:
         Pizza(std::string &_name, const std::string &_menu_file)
-        :abs_shop::Shop(_name,_menu_file){
+        :abs_shop::Shop(_name){
+             try
+            {
+                menu = UI::loadMenuFromFile(_menu_file);
+                if (menu.empty()){
+                    menu.emplace_back("special_order",0.0);
+                    throw "load menu data faild";
+                }
+            }
+            catch(char* msg)
+            {
+                std::cerr << msg << '\n';
+            }
+            
         }
-        /*
         
-        virtual bool order_done() = 0; 
-        */
         void display_menu() override {
             for (int i = 0 ; i < menu.size() ; i++){
                 std::cout<< "<< "<<i+1<<" >> dish : "<<menu[i].product<<"  >> cost : "<<menu[i].price<<" per unit\n";
+            }
+        }
+
+        void display_order() override {
+            for (int i = 0 ; i < order.size() ; i++){
+                std::cout<< "<< "<<i+1<<" >> dish : "<<order[i].menu.product<<"  >> cost : "<<order[i].total_price<<" per "<<order[i].count<<std::endl;
             }
         }
 
@@ -35,7 +52,7 @@ namespace shop
         }
 
         double get_total_cost()  override {
-            return order_cost;
+            return (order_cost + (order_cost * 0.14));
         }
         ~Pizza(){}
     };
